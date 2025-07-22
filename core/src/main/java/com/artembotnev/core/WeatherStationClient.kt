@@ -1,4 +1,4 @@
-package com.artembotnev.weather_station_core
+package com.artembotnev.core
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.OkHttp
@@ -41,6 +41,17 @@ class WeatherStationClient(private val baseUrl: String) {
             url {
                 appendPathSegments(deviceId.toString())
                 parameters.append("additional", "true")
+            }
+        }
+
+    @Throws(ResponseException::class)
+    suspend fun getDeviceListDailyErrors(): HttpResponse = client.get("${baseUrl}/device_analytics")
+
+    @Throws(ResponseException::class)
+    suspend fun getDeviceDailyErrors(deviceId: Int): HttpResponse = client
+        .get("${baseUrl}/device_analytics") {
+            url {
+                appendPathSegments(deviceId.toString())
             }
         }
 }

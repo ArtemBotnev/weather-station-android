@@ -1,7 +1,7 @@
-package com.artembotnev.weather_station_core
+package com.artembotnev.core
 
-import com.artembotnev.weather_station_core.data.WeatherStationRepositoryImpl
-import com.artembotnev.weather_station_core.domain.WeatherStationRepository
+import com.artembotnev.core.data.WeatherStationRepositoryImpl
+import com.artembotnev.core.domain.WeatherStationRepository
 import javax.inject.Inject
 
 class WeatherStationRepositoryFactory @Inject constructor(private val baseUrl: String) {
