@@ -1,6 +1,7 @@
 plugins {
     id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 java {
@@ -22,5 +23,6 @@ dependencies {
 //    implementation(libs.logging.interceptor)
     implementation(libs.ktor.ktor.client.logging)
     implementation(libs.logback.classic)
+    implementation (libs.javax.inject)
     testImplementation(libs.junit)
 }

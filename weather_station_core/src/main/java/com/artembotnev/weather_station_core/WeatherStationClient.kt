@@ -13,7 +13,7 @@ import io.ktor.http.appendPathSegments
 import io.ktor.serialization.kotlinx.json.json
 import kotlin.jvm.Throws
 
-private const val REQUEST_TIMEOUT_MS = 5000L
+private const val REQUEST_TIMEOUT_MS = 3000L
 
 class WeatherStationClient(private val baseUrl: String) {
 
@@ -35,6 +35,7 @@ class WeatherStationClient(private val baseUrl: String) {
     @Throws(ResponseException::class)
     suspend fun getDeviseList(): HttpResponse = client.get("${baseUrl}/devices")
 
+    @Throws(ResponseException::class)
     suspend fun getMeasurement(deviceId: Int): HttpResponse = client
         .get("${baseUrl}/last_measurement") {
             url {
