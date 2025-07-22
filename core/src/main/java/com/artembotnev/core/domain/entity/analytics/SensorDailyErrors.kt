@@ -1,5 +1,8 @@
-package com.artembotnev.weather_station_core.domain.entity.analytics
+package com.artembotnev.core.domain.entity.analytics
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class SensorDailyErrors(
     val sensorId: String,
     val sensorName: String?,

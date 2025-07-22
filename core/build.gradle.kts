@@ -20,7 +20,6 @@ dependencies {
     implementation(libs.ktor.client.okhttp)
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.ktor.client.content.negotiation)
-//    implementation(libs.logging.interceptor)
     implementation(libs.ktor.ktor.client.logging)
     implementation(libs.logback.classic)
     implementation (libs.javax.inject)

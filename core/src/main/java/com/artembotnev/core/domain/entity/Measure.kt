@@ -1,4 +1,4 @@
-package com.artembotnev.weather_station_core.domain.entity
+package com.artembotnev.core.domain.entity
 
 import kotlinx.serialization.Serializable
 
