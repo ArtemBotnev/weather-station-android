@@ -8,7 +8,9 @@ val Teal = Color(0xFF009688) // primary
 
 val Amber = Color(0xFFFFC107) // accent color
 val Background = Color(0xFFFFFFFF)
+val SecondBackground = Color(0xD2EDEDED)
 val DarkBackground = Color(0xFF212121)
+val SecondDarkBackground = Color(0xFF343434)
 
 val DarkText = Color(0xFFFFFFFF)
 val Text = Color(0xFF212121)
