@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Card
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -18,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.artembotnev.weatherstation.MainScreenEvent
@@ -66,6 +68,19 @@ internal fun SettingsDrawerView(
                     onValueChange = {
                         onEvent?.invoke(
                             MainScreenEvent.HostInputUpdated(it)
+                        )
+                    }
+                )
+                OutlinedTextField(
+                    modifier = Modifier.padding(top = 4.dp),
+                    value = state.port,
+                    singleLine = true,
+                    label = { Text(stringResource(R.string.port_title)) },
+                    placeholder = { Text(state.port) },
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    onValueChange = {
+                        onEvent?.invoke(
+                            MainScreenEvent.PortInputUpdated(it)
                         )
                     }
                 )
