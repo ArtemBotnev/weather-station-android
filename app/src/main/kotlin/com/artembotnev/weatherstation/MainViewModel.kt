@@ -2,9 +2,12 @@ package com.artembotnev.weatherstation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.artembotnev.core.WeatherStationRepositoryFactory
+import com.artembotnev.core.domain.WeatherStationRepository
 import com.artembotnev.weatherstation.di.IoDispatcher
 import com.artembotnev.weatherstation.domain.UserPreferenceRepository
 import com.artembotnev.weatherstation.storage.SessionInMemoryStorage
+import com.artembotnev.weatherstation.ui.views.MeasureViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -28,6 +31,7 @@ private const val TAG = "MainViewModel"
 internal class MainViewModel @Inject constructor(
     private val userPreference: UserPreferenceRepository,
     private val inMemoryStorage: SessionInMemoryStorage,
+    private val weatherRepositoryFactory: WeatherStationRepositoryFactory,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -41,10 +45,13 @@ internal class MainViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(createInitialState())
     val uiState = _uiState.asStateFlow()
 
+    private var _weatherRepository: WeatherStationRepository? = null
+
     init {
         fillState()
         observeNetworkAddress()
         observeHostAndPortChanged()
+        loadData()
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -88,7 +95,9 @@ internal class MainViewModel @Inject constructor(
                     mutex.withLock {
                         inMemoryStorage.networkAddress = it
                         Timber.tag("$TAG networkAddress").i(it)
+                        _weatherRepository = weatherRepositoryFactory.get("http://${it}")
                     }
+                    loadData()
                 }
         }
     }
@@ -96,6 +105,14 @@ internal class MainViewModel @Inject constructor(
     private fun createInitialState(): MainScreenState = MainScreenState(
         host = "",
         port = "",
+        measureViewState = MeasureViewState(
+            title = "-",
+            value = "-",
+            valueMin = "-",
+            valueAverage = "-",
+            valueMax = "-",
+            showDailyCalculations = true,
+        )
     )
 
     private fun fillState() {
@@ -106,6 +123,24 @@ internal class MainViewModel @Inject constructor(
             Timber.tag("$TAG port:").i(port)
             _uiState.update {
                 it.copy(host = host, port = port)
+            }
+        }
+    }
+
+    private fun loadData() {
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
+            _weatherRepository?.getMeasurement(0)?.measures[0]?.let { measure ->
+                _uiState.update {
+                    it.copy(
+                        measureViewState = it.measureViewState.copy(
+                            title = "${measure.measureName} ${measure.measureUnit}",
+                            value = measure.measureValue.toString(),
+                            valueMin = measure.dailyCalculation?.minValue.toStringOrDash(),
+                            valueAverage = measure.dailyCalculation?.averageValue.toStringOrDash(),
+                            valueMax = measure.dailyCalculation?.maxValue.toStringOrDash(),
+                        )
+                    )
+                }
             }
         }
     }

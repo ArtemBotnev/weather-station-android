@@ -39,6 +39,9 @@ android {
     hilt {
         enableAggregatingTask = false
     }
+//    packaging {
+//        resources.excludes.add("META-INF/INDEX.LIST")
+//    }
 }
 
 dependencies {
@@ -51,14 +54,19 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.datastore)
 
     implementation(libs.timber)
 
-    implementation(libs.androidx.datastore)
-
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
+
+    implementation(project(":core"))
+
     ksp(libs.hilt.compiler)
+
+    debugImplementation(libs.androidx.compose.ui.tooling)
+
 //    testImplementation(libs.junit)
 //    androidTestImplementation(libs.androidx.junit)
 //    androidTestImplementation(libs.androidx.espresso.core)

@@ -14,11 +14,25 @@ val Typography = Typography(
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
+    bodySmall = TextStyle(
+        fontFamily = robotoFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp,
+        lineHeight = 10.sp,
+        letterSpacing = 0.5.sp
+    ),
     titleLarge = TextStyle(
         fontFamily = robotoFontFamily,
         fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
+        fontSize = 36.sp,
+        lineHeight = 40.sp,
+        letterSpacing = 0.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = robotoFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 10.sp,
+        lineHeight = 12.sp,
         letterSpacing = 0.sp
     ),
 /* Other default text styles to override
