@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WeatherStation</string>
+    <string name="app_name">Weather Station</string>
 <!--    Settings-->
     <string name="settings_title">Settings</string>
     <string name="host_title">server host</string>
