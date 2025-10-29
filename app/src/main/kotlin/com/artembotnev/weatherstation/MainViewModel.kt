@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.artembotnev.core.WeatherStationRepositoryFactory
 import com.artembotnev.core.domain.WeatherStationRepository
 import com.artembotnev.weatherstation.di.IoDispatcher
+import com.artembotnev.weatherstation.domain.DateTimeUseCase
 import com.artembotnev.weatherstation.domain.UserPreferenceRepository
 import com.artembotnev.weatherstation.storage.SessionInMemoryStorage
 import com.artembotnev.weatherstation.ui.views.MeasureViewState
@@ -32,6 +33,7 @@ internal class MainViewModel @Inject constructor(
     private val userPreference: UserPreferenceRepository,
     private val inMemoryStorage: SessionInMemoryStorage,
     private val weatherRepositoryFactory: WeatherStationRepositoryFactory,
+    private val dateTime: DateTimeUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -67,6 +69,7 @@ internal class MainViewModel @Inject constructor(
                     it.copy(host = event.text)
                 }
             }
+            is MainScreenEvent.ReloadClicked -> loadData()
         }
     }
 
@@ -111,6 +114,8 @@ internal class MainViewModel @Inject constructor(
             valueMin = "-",
             valueAverage = "-",
             valueMax = "-",
+            timeMin = "-",
+            timeMax = "-",
             showDailyCalculations = true,
         )
     )
@@ -129,6 +134,7 @@ internal class MainViewModel @Inject constructor(
 
     private fun loadData() {
         viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
+            _uiState.update { it.copy(isRefreshing = true) }
             _weatherRepository?.getMeasurement(0)?.measures[0]?.let { measure ->
                 _uiState.update {
                     it.copy(
@@ -138,7 +144,14 @@ internal class MainViewModel @Inject constructor(
                             valueMin = measure.dailyCalculation?.minValue.toStringOrDash(),
                             valueAverage = measure.dailyCalculation?.averageValue.toStringOrDash(),
                             valueMax = measure.dailyCalculation?.maxValue.toStringOrDash(),
-                        )
+                            timeMin = measure.dailyCalculation?.minValueTime?.let { stamp ->
+                                dateTime.timeStampToTime(stamp)
+                            }.orDash(),
+                            timeMax = measure.dailyCalculation?.maxValueTime?.let { stamp ->
+                                dateTime.timeStampToTime(stamp)
+                            }.orDash()
+                        ),
+                        isRefreshing = false
                     )
                 }
             }

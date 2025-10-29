@@ -9,5 +9,7 @@ internal data class MeasureViewState(
     val valueMin: String,
     val valueAverage: String,
     val valueMax: String,
+    val timeMin: String,
+    val timeMax: String,
     val showDailyCalculations: Boolean,
 )
