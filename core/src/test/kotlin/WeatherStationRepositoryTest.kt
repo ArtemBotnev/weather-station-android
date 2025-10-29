@@ -6,13 +6,13 @@ import org.junit.Test
 
 class WeatherStationRepositoryTest {
 
-    private val factory = WeatherStationRepositoryFactory(BASE_URL)
+    private val factory = WeatherStationRepositoryFactory()
 
     private lateinit var repository: WeatherStationRepository
 
     @Before
     fun before() {
-        repository = factory.get()
+        repository = factory.get(BASE_URL)
     }
 
     @Test

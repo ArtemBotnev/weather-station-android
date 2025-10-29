@@ -92,9 +92,11 @@ internal fun SettingsDrawerView(
 @Preview
 @Composable
 fun SettingsDrawerViewPreview() {
-//    SettingsDrawerView(
-//        state = MainScreenState(
-//            title = "title"
+//    MaterialTheme {
+//        SettingsDrawerView(
+//            state = MainScreenState(
+//                title = "title"
+//            )
 //        )
-//    )
+//    }
 }

@@ -18,6 +18,7 @@ import com.artembotnev.weatherstation.ui.theme.WeatherStationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import com.artembotnev.weatherstation.ui.views.MeasureView
 
 @AndroidEntryPoint
 internal class MainActivity : ComponentActivity() {
@@ -48,17 +49,21 @@ internal fun MainContent(state: MainScreenState, onEvent: ((MainScreenEvent) -> 
         }
     }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        scrimColor = Color.Transparent,
-        drawerContent = {
-            SettingsDrawerView(
-                state = state,
-                onEvent = onEvent,
+    WeatherStationTheme {
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            scrimColor = Color.Transparent,
+            drawerContent = {
+                SettingsDrawerView(
+                    state = state,
+                    onEvent = onEvent,
+                )
+            },
+        ) {
+            MeasureView(
+                state = state.measureViewState
             )
-        },
-    ) {
-
+        }
     }
 }
 

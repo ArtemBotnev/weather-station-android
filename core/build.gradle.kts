@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.ktor.serialization.kotlinx.json)
     implementation(libs.ktor.ktor.client.content.negotiation)
     implementation(libs.ktor.ktor.client.logging)
-    implementation(libs.logback.classic)
+//    implementation(libs.logback.classic) // do not use with android
     implementation (libs.javax.inject)
     testImplementation(libs.junit)
 }
