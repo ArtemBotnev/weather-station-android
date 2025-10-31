@@ -89,6 +89,7 @@ fun MeasureViewPreview() {
                 measureViewState = MeasureViewState(
                     title = "Temperature C",
                     value = "21",
+                    time = "21.10.25 16:43",
                     valueMin = "15",
                     valueMax = "23",
                     valueAverage = "19",
