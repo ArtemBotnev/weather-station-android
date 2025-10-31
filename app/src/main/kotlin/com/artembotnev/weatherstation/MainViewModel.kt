@@ -6,6 +6,8 @@ import com.artembotnev.core.WeatherStationRepositoryFactory
 import com.artembotnev.core.domain.WeatherStationRepository
 import com.artembotnev.weatherstation.di.IoDispatcher
 import com.artembotnev.weatherstation.domain.DateTimeUseCase
+import com.artembotnev.weatherstation.domain.DeviceUseCase
+import com.artembotnev.weatherstation.domain.MeasurementUseCase
 import com.artembotnev.weatherstation.domain.UserPreferenceRepository
 import com.artembotnev.weatherstation.storage.SessionInMemoryStorage
 import com.artembotnev.weatherstation.ui.views.MeasureViewState
@@ -34,6 +36,8 @@ internal class MainViewModel @Inject constructor(
     private val inMemoryStorage: SessionInMemoryStorage,
     private val weatherRepositoryFactory: WeatherStationRepositoryFactory,
     private val dateTime: DateTimeUseCase,
+    private val devicesUseCase: DeviceUseCase,
+    private val measurementUseCase: MeasurementUseCase,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -53,7 +57,7 @@ internal class MainViewModel @Inject constructor(
         fillState()
         observeNetworkAddress()
         observeHostAndPortChanged()
-        loadData()
+        loadDevices()
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -135,6 +139,9 @@ internal class MainViewModel @Inject constructor(
     private fun loadData() {
         viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
             _uiState.update { it.copy(isRefreshing = true) }
+            inMemoryStorage.currentDeviceList.forEach {
+
+            }
             _weatherRepository?.getMeasurement(0)?.measures[0]?.let { measure ->
                 _uiState.update {
                     it.copy(
@@ -154,6 +161,19 @@ internal class MainViewModel @Inject constructor(
                         isRefreshing = false
                     )
                 }
+            }
+        }
+    }
+
+    private fun loadDevices() {
+        _weatherRepository?.let {
+            viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
+                val map = devicesUseCase.getDeviceLocationMap(it)
+
+//                TODO: change it
+                val currentDevices = map[map.keys.first()]
+                inMemoryStorage.currentDeviceList = currentDevices.orEmpty()
+                loadData()
             }
         }
     }
