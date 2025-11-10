@@ -25,8 +25,8 @@ import com.artembotnev.weatherstation.R
 import com.artembotnev.weatherstation.ui.theme.Typography
 
 @Composable
-internal fun MeasureView(state: MeasureViewState) = ElevatedCard(
-    modifier = Modifier.size(150.dp),
+internal fun MeasureView(modifier: Modifier = Modifier, state: MeasureViewState) = ElevatedCard(
+    modifier = modifier.size(160.dp),
     shape = RoundedCornerShape(5.dp),
 ) {
     Column(
@@ -110,6 +110,8 @@ fun MeasureViewPreview() {
                 valueAverage = "19",
                 timeMin = "14:34",
                 timeMax = "09:28",
+                sensorName = "sensor",
+                sensorPlace = "place",
                 showDailyCalculations = true
             )
         )

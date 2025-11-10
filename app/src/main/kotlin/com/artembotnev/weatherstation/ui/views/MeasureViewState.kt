@@ -12,5 +12,7 @@ internal data class MeasureViewState(
     val valueMax: String,
     val timeMin: String,
     val timeMax: String,
+    val sensorName: String?,
+    val sensorPlace: String,
     val showDailyCalculations: Boolean,
 )

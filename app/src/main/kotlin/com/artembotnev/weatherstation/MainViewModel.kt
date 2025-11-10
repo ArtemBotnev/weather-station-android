@@ -111,17 +111,7 @@ internal class MainViewModel @Inject constructor(
     private fun createInitialState(): MainScreenState = MainScreenState(
         host = "",
         port = "",
-        measureViewState = MeasureViewState(
-            title = "-",
-            value = "-",
-            time = "",
-            valueMin = "-",
-            valueAverage = "-",
-            valueMax = "-",
-            timeMin = "-",
-            timeMax = "-",
-            showDailyCalculations = true,
-        )
+        measuresViewState = listOf()
     )
 
     private fun fillState() {
@@ -171,8 +161,7 @@ internal class MainViewModel @Inject constructor(
             )
             _uiState.update {
                 it.copy(
-//                TODO: change it
-                    measureViewState = uiMeasures[0],
+                    measuresViewState = uiMeasures,
                     isRefreshing = false
                 )
             }

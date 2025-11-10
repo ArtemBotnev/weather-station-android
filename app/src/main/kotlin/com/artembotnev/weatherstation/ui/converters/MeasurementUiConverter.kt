@@ -27,6 +27,8 @@ internal class MeasurementUiConverter @Inject constructor(
                 timeMax = it.dailyCalculation?.maxValueTime?.let { stamp ->
                     dateTime.timeStampToTime(stamp)
                 }.orDash(),
+                sensorName = it.sensorName,
+                sensorPlace = it.sensorPlace,
                 showDailyCalculations = param?.let { value ->
                     value as? Boolean ?: true
                 } ?: true
