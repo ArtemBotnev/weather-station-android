@@ -25,8 +25,8 @@ import com.artembotnev.weatherstation.R
 import com.artembotnev.weatherstation.ui.theme.Typography
 
 @Composable
-internal fun MeasureView(state: MeasureViewState) = ElevatedCard(
-    modifier = Modifier.size(150.dp),
+internal fun MeasureView(modifier: Modifier = Modifier, state: MeasureViewState) = ElevatedCard(
+    modifier = modifier.size(160.dp),
     shape = RoundedCornerShape(5.dp),
 ) {
     Column(
@@ -63,9 +63,9 @@ internal fun MeasureView(state: MeasureViewState) = ElevatedCard(
                     .padding(horizontal = 2.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
-                DailyMeasureCell(titleRes = R.string.min, value = state.valueMin)
+                DailyMeasureCell(titleRes = R.string.min, value = state.valueMin, time = state.timeMin)
                 DailyMeasureCell(titleRes = R.string.average, value = state.valueAverage)
-                DailyMeasureCell(titleRes = R.string.max, value = state.valueMax)
+                DailyMeasureCell(titleRes = R.string.max, value = state.valueMax, time = state.timeMax)
             }
         }
     }
@@ -76,11 +76,16 @@ private fun DailyMeasureCell(
     modifier: Modifier = Modifier,
     @StringRes titleRes: Int,
     value: String,
+    time: String? = null,
 ) = Column(
     modifier = modifier.wrapContentSize(),
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.SpaceBetween
 ) {
+    Text(
+        text = time.orEmpty(),
+        style = Typography.titleSmall,
+    )
     Text(
         text = value,
         style = Typography.bodySmall,
@@ -99,9 +104,14 @@ fun MeasureViewPreview() {
             state = MeasureViewState(
                 title = "Temperature C",
                 value = "21",
+                time = "21.10.25 16:43",
                 valueMin = "15",
                 valueMax = "23",
                 valueAverage = "19",
+                timeMin = "14:34",
+                timeMax = "09:28",
+                sensorName = "sensor",
+                sensorPlace = "place",
                 showDailyCalculations = true
             )
         )

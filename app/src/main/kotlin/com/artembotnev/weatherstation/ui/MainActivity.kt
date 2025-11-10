@@ -18,7 +18,6 @@ import com.artembotnev.weatherstation.ui.theme.WeatherStationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.artembotnev.weatherstation.ui.views.MeasureView
 
 @AndroidEntryPoint
 internal class MainActivity : ComponentActivity() {
@@ -60,9 +59,7 @@ internal fun MainContent(state: MainScreenState, onEvent: ((MainScreenEvent) -> 
                 )
             },
         ) {
-            MeasureView(
-                state = state.measureViewState
-            )
+            MainScreen(state = state, onEvent = onEvent)
         }
     }
 }

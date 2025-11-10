@@ -7,5 +7,6 @@ import com.artembotnev.weatherstation.ui.views.MeasureViewState
 internal data class MainScreenState(
     val host: String,
     val port: String,
-    val measureViewState: MeasureViewState,
+    val measuresViewState: List<MeasureViewState>,
+    val isRefreshing: Boolean = false,
 )

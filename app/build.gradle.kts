@@ -57,6 +57,7 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     implementation(libs.timber)
+    implementation(libs.joda.time.android )
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)

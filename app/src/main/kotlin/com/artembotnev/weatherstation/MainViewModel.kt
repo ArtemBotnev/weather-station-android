@@ -5,8 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.artembotnev.core.WeatherStationRepositoryFactory
 import com.artembotnev.core.domain.WeatherStationRepository
 import com.artembotnev.weatherstation.di.IoDispatcher
+import com.artembotnev.weatherstation.domain.DeviceUseCase
+import com.artembotnev.weatherstation.domain.MeasurementUseCase
 import com.artembotnev.weatherstation.domain.UserPreferenceRepository
 import com.artembotnev.weatherstation.storage.SessionInMemoryStorage
+import com.artembotnev.weatherstation.ui.converters.MeasurementUiConverter
 import com.artembotnev.weatherstation.ui.views.MeasureViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
@@ -32,6 +35,9 @@ internal class MainViewModel @Inject constructor(
     private val userPreference: UserPreferenceRepository,
     private val inMemoryStorage: SessionInMemoryStorage,
     private val weatherRepositoryFactory: WeatherStationRepositoryFactory,
+    private val devicesUseCase: DeviceUseCase,
+    private val measurementUseCase: MeasurementUseCase,
+    private val measurementUiConverter: MeasurementUiConverter,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
@@ -51,7 +57,6 @@ internal class MainViewModel @Inject constructor(
         fillState()
         observeNetworkAddress()
         observeHostAndPortChanged()
-        loadData()
     }
 
     fun onEvent(event: MainScreenEvent) {
@@ -67,6 +72,7 @@ internal class MainViewModel @Inject constructor(
                     it.copy(host = event.text)
                 }
             }
+            is MainScreenEvent.ReloadClicked -> updateData()
         }
     }
 
@@ -97,7 +103,7 @@ internal class MainViewModel @Inject constructor(
                         Timber.tag("$TAG networkAddress").i(it)
                         _weatherRepository = weatherRepositoryFactory.get("http://${it}")
                     }
-                    loadData()
+                    loadDevices()
                 }
         }
     }
@@ -105,14 +111,7 @@ internal class MainViewModel @Inject constructor(
     private fun createInitialState(): MainScreenState = MainScreenState(
         host = "",
         port = "",
-        measureViewState = MeasureViewState(
-            title = "-",
-            value = "-",
-            valueMin = "-",
-            valueAverage = "-",
-            valueMax = "-",
-            showDailyCalculations = true,
-        )
+        measuresViewState = listOf()
     )
 
     private fun fillState() {
@@ -127,20 +126,44 @@ internal class MainViewModel @Inject constructor(
         }
     }
 
-    private fun loadData() {
+    private fun updateData() {
         viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
-            _weatherRepository?.getMeasurement(0)?.measures[0]?.let { measure ->
-                _uiState.update {
-                    it.copy(
-                        measureViewState = it.measureViewState.copy(
-                            title = "${measure.measureName} ${measure.measureUnit}",
-                            value = measure.measureValue.toString(),
-                            valueMin = measure.dailyCalculation?.minValue.toStringOrDash(),
-                            valueAverage = measure.dailyCalculation?.averageValue.toStringOrDash(),
-                            valueMax = measure.dailyCalculation?.maxValue.toStringOrDash(),
-                        )
-                    )
-                }
+            loadData()
+        }
+    }
+
+    private fun loadDevices() {
+        _weatherRepository?.let {
+            viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
+                val devices = it.getDevices()
+                val map = devicesUseCase.getDeviceLocationMap(devices)
+
+//                TODO: change it
+                val currentDevices = map[map.keys.first()]
+                inMemoryStorage.currentDeviceList = currentDevices.orEmpty()
+                loadData()
+            }
+        }
+    }
+
+    private suspend fun loadData() {
+        _uiState.update { it.copy(isRefreshing = true) }
+        _weatherRepository?.let { repository ->
+            val measurementMap = measurementUseCase.getLocationMeasurementMap(
+                inMemoryStorage.currentDeviceList
+            ) {
+                repository.getMeasurement(it)
+            }
+            val uiMeasures = measurementUiConverter.convert(
+//                TODO: change it
+                from = measurementMap[measurementMap.keys.first()]!!,
+                param = true,
+            )
+            _uiState.update {
+                it.copy(
+                    measuresViewState = uiMeasures,
+                    isRefreshing = false
+                )
             }
         }
     }
