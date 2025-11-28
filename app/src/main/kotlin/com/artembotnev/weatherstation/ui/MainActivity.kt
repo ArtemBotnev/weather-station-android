@@ -40,7 +40,6 @@ internal class MainActivity : ComponentActivity() {
 @Composable
 internal fun MainContent(state: MainScreenState, onEvent: ((MainScreenEvent) -> Unit)? = null) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val drawerScope = rememberCoroutineScope()
 
     LaunchedEffect(drawerState.currentValue) {
         if (drawerState.currentValue == DrawerValue.Closed) {

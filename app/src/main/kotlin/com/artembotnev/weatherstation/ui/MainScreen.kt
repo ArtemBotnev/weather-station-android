@@ -25,7 +25,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.artembotnev.weatherstation.MainScreenEvent
 import com.artembotnev.weatherstation.MainScreenState
 import com.artembotnev.weatherstation.R
-import com.artembotnev.weatherstation.ui.views.MeasureListView
+import com.artembotnev.weatherstation.ui.views.MeasurePager
 import com.artembotnev.weatherstation.ui.views.MeasureViewState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -50,13 +50,7 @@ internal fun MainScreen(
             onRefresh = { onEvent?.invoke(MainScreenEvent.ReloadClicked) },
             state = refreshState,
         ) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-            ) {
-                MeasureListView(states = state.measuresViewState)
-            }
+            MeasurePager(state = state.measuresViewStates)
         }
     }
 }
@@ -84,19 +78,21 @@ fun MeasureViewPreview() {
             state = MainScreenState(
                 host = "",
                 port = "",
-                measuresViewState = listOf(
-                    MeasureViewState(
-                        title = "Temperature C",
-                        value = "21",
-                        time = "21.10.25 16:43",
-                        valueMin = "15",
-                        valueMax = "23",
-                        valueAverage = "19",
-                        timeMin = "14:34",
-                        timeMax = "09:28",
-                        sensorName = "sensor",
-                        sensorPlace = "place",
-                        showDailyCalculations = true
+                measuresViewStates = listOf(
+                    listOf(
+                        MeasureViewState(
+                            title = "Temperature C",
+                            value = "21",
+                            time = "21.10.25 16:43",
+                            valueMin = "15",
+                            valueMax = "23",
+                            valueAverage = "19",
+                            timeMin = "14:34",
+                            timeMax = "09:28",
+                            sensorName = "sensor",
+                            sensorPlace = "place",
+                            showDailyCalculations = true
+                        )
                     )
                 )
             )

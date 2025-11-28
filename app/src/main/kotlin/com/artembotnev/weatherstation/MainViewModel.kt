@@ -10,7 +10,6 @@ import com.artembotnev.weatherstation.domain.MeasurementUseCase
 import com.artembotnev.weatherstation.domain.UserPreferenceRepository
 import com.artembotnev.weatherstation.storage.SessionInMemoryStorage
 import com.artembotnev.weatherstation.ui.converters.MeasurementUiConverter
-import com.artembotnev.weatherstation.ui.views.MeasureViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineExceptionHandler
@@ -111,7 +110,7 @@ internal class MainViewModel @Inject constructor(
     private fun createInitialState(): MainScreenState = MainScreenState(
         host = "",
         port = "",
-        measuresViewState = listOf()
+        measuresViewStates = listOf(listOf())
     )
 
     private fun fillState() {
@@ -154,14 +153,15 @@ internal class MainViewModel @Inject constructor(
             ) {
                 repository.getMeasurement(it)
             }
-            val uiMeasures = measurementUiConverter.convert(
-//                TODO: change it
-                from = measurementMap[measurementMap.keys.first()]!!,
-                param = true,
-            )
+            val uiMeasures = measurementMap.keys.map {
+                measurementUiConverter.convert(
+                    from = measurementMap[it]!!,
+                    param = true,
+                )
+            }
             _uiState.update {
                 it.copy(
-                    measuresViewState = uiMeasures,
+                    measuresViewStates = uiMeasures,
                     isRefreshing = false
                 )
             }
