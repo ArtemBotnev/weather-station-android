@@ -60,7 +60,9 @@ internal class MainViewModel @Inject constructor(
 
     fun onEvent(event: MainScreenEvent) {
         when(event) {
-            is MainScreenEvent.SettingsDrawerClosed -> {  }
+            is MainScreenEvent.SettingsDrawerState -> {
+                _uiState.update { it.copy(isSettingsDrawerOpen = event.isOpen) }
+            }
             is MainScreenEvent.PortInputUpdated -> {
                 _uiState.update {
                     it.copy(port = event.text)
@@ -110,7 +112,7 @@ internal class MainViewModel @Inject constructor(
     private fun createInitialState(): MainScreenState = MainScreenState(
         host = "",
         port = "",
-        measuresViewStates = listOf(listOf())
+        measuresViewStates = listOf(listOf()),
     )
 
     private fun fillState() {
