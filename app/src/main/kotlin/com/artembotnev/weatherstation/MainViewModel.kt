@@ -113,6 +113,7 @@ internal class MainViewModel @Inject constructor(
         host = "",
         port = "",
         measuresViewStates = listOf(listOf()),
+        deviceLocations = listOf()
     )
 
     private fun fillState() {
@@ -138,6 +139,17 @@ internal class MainViewModel @Inject constructor(
             viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
                 val devices = it.getDevices()
                 val map = devicesUseCase.getDeviceLocationMap(devices)
+
+                _uiState.update {state ->
+                    state.copy(
+                        deviceLocations = map.values.mapIndexed { index, devices ->
+                            DeviceLocation(
+                                index = index,
+                                name = devices.first().name.orDash()
+                            )
+                        }
+                    )
+                }
 
 //                TODO: change it
                 val currentDevices = map[map.keys.first()]
