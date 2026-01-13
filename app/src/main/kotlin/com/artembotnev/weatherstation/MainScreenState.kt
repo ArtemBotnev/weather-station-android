@@ -1,5 +1,6 @@
 package com.artembotnev.weatherstation
 
+import androidx.compose.material3.DrawerState
 import androidx.compose.runtime.Immutable
 import com.artembotnev.weatherstation.ui.views.MeasureViewState
 
@@ -7,6 +8,7 @@ import com.artembotnev.weatherstation.ui.views.MeasureViewState
 internal data class MainScreenState(
     val host: String,
     val port: String,
-    val measuresViewState: List<MeasureViewState>,
+    val measuresViewStates: List<List<MeasureViewState>>,
     val isRefreshing: Boolean = false,
+    val isSettingsDrawerOpen: Boolean = false,
 )

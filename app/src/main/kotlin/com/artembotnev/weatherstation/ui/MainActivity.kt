@@ -18,6 +18,7 @@ import com.artembotnev.weatherstation.ui.theme.WeatherStationTheme
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.runtime.collectAsState
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 internal class MainActivity : ComponentActivity() {
@@ -39,12 +40,16 @@ internal class MainActivity : ComponentActivity() {
 
 @Composable
 internal fun MainContent(state: MainScreenState, onEvent: ((MainScreenEvent) -> Unit)? = null) {
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
-    val drawerScope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(
+        DrawerValue.Closed
+    )
 
-    LaunchedEffect(drawerState.currentValue) {
-        if (drawerState.currentValue == DrawerValue.Closed) {
-            onEvent?.invoke(MainScreenEvent.SettingsDrawerClosed)
+    LaunchedEffect(state.isSettingsDrawerOpen) {
+        scope.launch {
+            drawerState.apply {
+                if (state.isSettingsDrawerOpen) open() else close()
+            }
         }
     }
 
@@ -58,6 +63,7 @@ internal fun MainContent(state: MainScreenState, onEvent: ((MainScreenEvent) -> 
                     onEvent = onEvent,
                 )
             },
+            gesturesEnabled = false
         ) {
             MainScreen(state = state, onEvent = onEvent)
         }

@@ -1,6 +1,7 @@
 package com.artembotnev.weatherstation.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,6 +19,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,7 +46,16 @@ internal fun SettingsDrawerView(
         Card(
             modifier = Modifier
                 .padding(12.dp)
-                .fillMaxWidth(fraction = .8f),
+                .fillMaxWidth(fraction = .8f)
+                .pointerInput(Unit) {
+                    detectHorizontalDragGestures { _, dragAmount ->
+                        if (dragAmount < 0) {
+                            onEvent?.invoke(
+                                MainScreenEvent.SettingsDrawerState(isOpen = !state.isSettingsDrawerOpen)
+                            )
+                        }
+                    }
+                },
             shape = RoundedCornerShape(4.dp)
         ) {
             Column(

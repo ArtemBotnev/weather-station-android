@@ -4,6 +4,7 @@
     <string name="settings_title">Settings</string>
     <string name="host_title">server host</string>
     <string name="port_title">server port</string>
+    <string name="settings_icon_title">Settings</string>
 <!--    MeasureView-->
     <string name="min">min</string>
     <string name="average">average</string>
