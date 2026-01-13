@@ -29,37 +29,39 @@ internal fun MeasurePager(state: List<List<MeasureViewState>>) = Column(
     val pagerState = rememberPagerState(pageCount = {
         state.size
     })
-    Column(
+    HorizontalPager(
         modifier = Modifier
-            .weight(.9f)
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState()),
-    ) {
-        HorizontalPager(
-            modifier = Modifier.fillMaxSize(),
-            state = pagerState
-        ) {page ->
+            .fillMaxSize()
+            .weight(.9f),
+        state = pagerState,
+        verticalAlignment = Alignment.Top,
+    ) {page ->
+        Column(
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+        ) {
             MeasureListView(state[page])
         }
     }
-    Row(
-        Modifier
-            .weight(.1f)
-            .wrapContentHeight()
-            .fillMaxWidth()
-            .padding(bottom = 8.dp),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        repeat(pagerState.pageCount) { iteration ->
-            val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
-            Box(
-                modifier = Modifier
-                    .padding(2.dp)
-                    .clip(CircleShape)
-                    .background(color)
-                    .size(16.dp)
-            )
+    if (state.size > 1) {
+        Row(
+            Modifier
+                .weight(.1f)
+                .wrapContentHeight()
+                .fillMaxWidth()
+                .padding(bottom = 8.dp),
+            horizontalArrangement = Arrangement.Center,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(pagerState.pageCount) { iteration ->
+                val color = if (pagerState.currentPage == iteration) Color.DarkGray else Color.LightGray
+                Box(
+                    modifier = Modifier
+                        .padding(2.dp)
+                        .clip(CircleShape)
+                        .background(color)
+                        .size(16.dp)
+                )
+            }
         }
     }
 }
