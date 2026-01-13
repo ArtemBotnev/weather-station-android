@@ -11,4 +11,8 @@ internal data class MainScreenState(
     val measuresViewStates: List<List<MeasureViewState>>,
     val isRefreshing: Boolean = false,
     val isSettingsDrawerOpen: Boolean = false,
+    val deviceLocations: List<DeviceLocation>,
 )
+
+@Immutable
+internal data class DeviceLocation(val id: Int, val name: String)
