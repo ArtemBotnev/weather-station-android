@@ -35,15 +35,28 @@ internal fun MeasureView(modifier: Modifier = Modifier, state: MeasureViewState)
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .wrapContentHeight(),
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            Text(
-                text = state.title,
-                style = Typography.bodySmall,
-            )
+        Column {
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .wrapContentHeight(),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = state.place,
+                    style = Typography.bodySmall,
+                )
+            }
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .wrapContentHeight()
+                    .padding(top = 2.dp),
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                Text(
+                    text = state.title,
+                    style = Typography.bodySmall,
+                )
+            }
         }
         Box(
             modifier = Modifier.fillMaxWidth().
@@ -103,6 +116,7 @@ fun MeasureViewPreview() {
         MeasureView(
             state = MeasureViewState(
                 title = "Temperature C",
+                place = "Outdoor",
                 value = "21",
                 time = "21.10.25 16:43",
                 valueMin = "15",
