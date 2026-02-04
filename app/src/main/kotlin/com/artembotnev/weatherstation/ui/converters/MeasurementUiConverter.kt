@@ -15,6 +15,7 @@ internal class MeasurementUiConverter @Inject constructor(
     override fun convert(from: Measurement, param: Any?): List<MeasureViewState> =
         from.measures.map {
             MeasureViewState(
+                place = it.sensorPlace,
                 title = "${it.measureName} ${it.measureUnit}",
                 value = it.measureValue.toString(),
                 time = from.timestamp.orDash(),

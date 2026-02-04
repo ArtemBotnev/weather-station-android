@@ -110,6 +110,7 @@ fun MeasureViewPreview() {
                     listOf(
                         MeasureViewState(
                             title = "Temperature C",
+                            place = "Outdoor",
                             value = "21",
                             time = "21.10.25 16:43",
                             valueMin = "15",

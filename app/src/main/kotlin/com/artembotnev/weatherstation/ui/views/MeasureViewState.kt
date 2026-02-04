@@ -5,6 +5,7 @@ import androidx.compose.runtime.Immutable
 @Immutable
 internal data class MeasureViewState(
     val title: String,
+    val place: String,
     val value: String,
     val time: String,
     val valueMin: String,
