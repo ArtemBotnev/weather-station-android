@@ -62,7 +62,7 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
 
-    implementation(project(":core"))
+    implementation(libs.weather.station.client)
 
     ksp(libs.hilt.compiler)
 
