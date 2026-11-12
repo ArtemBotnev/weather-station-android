@@ -115,6 +115,7 @@ fun MeasureViewPreview() {
     MaterialTheme {
         MeasureView(
             state = MeasureViewState(
+                deviceName = "Device_1",
                 title = "Temperature C",
                 place = "Outdoor",
                 value = "21",

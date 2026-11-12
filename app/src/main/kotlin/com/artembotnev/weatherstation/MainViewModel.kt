@@ -116,8 +116,6 @@ internal class MainViewModel @Inject constructor(
         measuresViewStates = listOf(listOf()),
         locations = listOf(),
         selectedLocation = null,
-        deviceLocations = emptyMap(),
-        selectedDevice = null,
     )
 
     private fun fillState() {
@@ -144,19 +142,12 @@ internal class MainViewModel @Inject constructor(
                 val devices = it.getDevices()
                 val map = devicesUseCase.getDeviceLocationMap(devices)
                 val locations = map.keys.toList()
-                val deviceLocations = map.map { (location, devices) ->
-                    location to devices.map { device ->
-                        DeviceUiState(id = device.id, name = device.name.orDash())
-                    }
-                }.toMap()
 
                 val firstLocation = locations.firstOrNull()
                 _uiState.update { state ->
                     state.copy(
                         locations = locations,
                         selectedLocation = firstLocation,
-                        deviceLocations = deviceLocations,
-                        selectedDevice = deviceLocations[firstLocation]?.firstOrNull()
                     )
                 }
 
@@ -178,7 +169,8 @@ internal class MainViewModel @Inject constructor(
             val uiMeasures = measurementMap.keys.map {
                 measurementUiConverter.convert(
                     from = measurementMap[it]!!,
-                    param = true,
+                    param1 = it.name,
+                    param2 = true
                 )
             }
             _uiState.update {
@@ -195,7 +187,6 @@ internal class MainViewModel @Inject constructor(
         _uiState.update {
             it.copy(
                 selectedLocation = location,
-                selectedDevice = _uiState.value.deviceLocations[location]?.firstOrNull()
             )
         }
 

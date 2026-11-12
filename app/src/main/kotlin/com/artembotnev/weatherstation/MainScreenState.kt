@@ -12,9 +12,4 @@ internal data class MainScreenState(
     val isSettingsDrawerOpen: Boolean = false,
     val locations: List<String>,
     val selectedLocation: String?,
-    val deviceLocations: Map<String, List<DeviceUiState>>,
-    val selectedDevice: DeviceUiState?,
 )
-
-@Immutable
-internal data class DeviceUiState(val id: Int, val name: String)

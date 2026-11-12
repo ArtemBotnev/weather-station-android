@@ -4,6 +4,7 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 internal data class MeasureViewState(
+    val deviceName: String,
     val title: String,
     val place: String,
     val value: String,
