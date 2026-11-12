@@ -5,5 +5,6 @@ import javax.inject.Inject
 
 internal class SessionInMemoryStorageImpl @Inject constructor() : SessionInMemoryStorage {
     override var networkAddress: String? = null
+    override var deviceLocationMap: Map<String, List<Device>> = emptyMap()
     override var currentDeviceList: List<Device> = emptyList()
 }

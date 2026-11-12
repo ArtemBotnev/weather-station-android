@@ -74,6 +74,7 @@ internal class MainViewModel @Inject constructor(
                 }
             }
             is MainScreenEvent.ReloadClicked -> updateData()
+            is MainScreenEvent.DeviceLocationSelected -> updateLocation(event.location)
         }
     }
 
@@ -113,6 +114,10 @@ internal class MainViewModel @Inject constructor(
         host = "",
         port = "",
         measuresViewStates = listOf(listOf()),
+        locations = listOf(),
+        selectedLocation = null,
+        deviceLocations = emptyMap(),
+        selectedDevice = null,
     )
 
     private fun fillState() {
@@ -138,10 +143,25 @@ internal class MainViewModel @Inject constructor(
             viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
                 val devices = it.getDevices()
                 val map = devicesUseCase.getDeviceLocationMap(devices)
+                val locations = map.keys.toList()
+                val deviceLocations = map.map { (location, devices) ->
+                    location to devices.map { device ->
+                        DeviceUiState(id = device.id, name = device.name.orDash())
+                    }
+                }.toMap()
 
-//                TODO: change it
-                val currentDevices = map[map.keys.first()]
-                inMemoryStorage.currentDeviceList = currentDevices.orEmpty()
+                val firstLocation = locations.firstOrNull()
+                _uiState.update { state ->
+                    state.copy(
+                        locations = locations,
+                        selectedLocation = firstLocation,
+                        deviceLocations = deviceLocations,
+                        selectedDevice = deviceLocations[firstLocation]?.firstOrNull()
+                    )
+                }
+
+                inMemoryStorage.deviceLocationMap = map
+                inMemoryStorage.currentDeviceList = map[firstLocation].orEmpty()
                 loadData()
             }
         }
@@ -167,6 +187,20 @@ internal class MainViewModel @Inject constructor(
                     isRefreshing = false
                 )
             }
+        }
+    }
+
+    private fun updateLocation(location: String) {
+        inMemoryStorage.currentDeviceList = inMemoryStorage.deviceLocationMap[location].orEmpty()
+        _uiState.update {
+            it.copy(
+                selectedLocation = location,
+                selectedDevice = _uiState.value.deviceLocations[location]?.firstOrNull()
+            )
+        }
+
+        viewModelScope.launch(ioDispatcher + coroutineExceptionHandler) {
+            loadData()
         }
     }
 }

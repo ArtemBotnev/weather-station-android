@@ -26,7 +26,14 @@ val Typography = Typography(
         fontWeight = FontWeight.Normal,
         fontSize = 36.sp,
         lineHeight = 40.sp,
-        letterSpacing = 0.sp
+        letterSpacing = 1.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = robotoFontFamily,
+        fontWeight = FontWeight.Normal,
+        fontSize = 26.sp,
+        lineHeight = 32.sp,
+        letterSpacing = 0.5.sp
     ),
     titleSmall = TextStyle(
         fontFamily = robotoFontFamily,

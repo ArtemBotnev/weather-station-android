@@ -6,4 +6,5 @@ internal sealed interface MainScreenEvent {
     data object ReloadClicked : MainScreenEvent
     data class HostInputUpdated(val text: String) : MainScreenEvent
     data class PortInputUpdated(val text: String) : MainScreenEvent
+    data class DeviceLocationSelected(val location: String) : MainScreenEvent
 }
