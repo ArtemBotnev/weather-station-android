@@ -69,11 +69,3 @@ internal fun MainContent(state: MainScreenState, onEvent: ((MainScreenEvent) -> 
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    WeatherStationTheme {
-//        Greeting("Android")
-//    }
-//}

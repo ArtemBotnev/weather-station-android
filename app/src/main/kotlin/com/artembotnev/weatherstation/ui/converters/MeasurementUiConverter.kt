@@ -12,27 +12,32 @@ internal class MeasurementUiConverter @Inject constructor(
     private val dateTime: DateTimeUseCase,
 ) : UiConverter<Measurement, List<MeasureViewState>> {
 
-    override fun convert(from: Measurement, param: Any?): List<MeasureViewState> =
-        from.measures.map {
-            MeasureViewState(
-                place = it.sensorPlace,
-                title = "${it.measureName} ${it.measureUnit}",
-                value = it.measureValue.toString(),
-                time = from.timestamp.orDash(),
-                valueMin = it.dailyCalculation?.minValue.toStringOrDash(),
-                valueAverage = it.dailyCalculation?.averageValue.toStringOrDash(),
-                valueMax = it.dailyCalculation?.maxValue.toStringOrDash(),
-                timeMin = it.dailyCalculation?.minValueTime?.let { stamp ->
-                    dateTime.timeStampToTime(stamp)
-                }.orDash(),
-                timeMax = it.dailyCalculation?.maxValueTime?.let { stamp ->
-                    dateTime.timeStampToTime(stamp)
-                }.orDash(),
-                sensorName = it.sensorName,
-                sensorPlace = it.sensorPlace,
-                showDailyCalculations = param?.let { value ->
-                    value as? Boolean ?: true
-                } ?: true
-            )
-        }
+    override fun convert(
+        from: Measurement,
+        param1: Any?,
+        param2: Any?
+    ): List<MeasureViewState> = from.measures.map {
+        MeasureViewState(
+            deviceName = param1?.let { value -> value as? String }.orEmpty(),
+            place = it.sensorPlace,
+            title = "${it.measureName} ${it.measureUnit}",
+            value = it.measureValue.toString(),
+            time = from.timestamp.orDash(),
+            valueMin = it.dailyCalculation?.minValue.toStringOrDash(),
+            valueAverage = it.dailyCalculation?.averageValue.toStringOrDash(),
+            valueMax = it.dailyCalculation?.maxValue.toStringOrDash(),
+            timeMin = it.dailyCalculation?.minValueTime?.let { stamp ->
+                dateTime.timeStampToTime(stamp)
+            }.orDash(),
+            timeMax = it.dailyCalculation?.maxValueTime?.let { stamp ->
+                dateTime.timeStampToTime(stamp)
+            }.orDash(),
+            sensorName = it.sensorName,
+            sensorPlace = it.sensorPlace,
+            showDailyCalculations = param2?.let { value ->
+                value as? Boolean ?: true
+            } ?: true
+        )
+    }
+
 }
