@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenu
 import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
@@ -44,7 +45,6 @@ import com.artembotnev.weatherstation.MainScreenState
 import com.artembotnev.weatherstation.R
 import com.artembotnev.weatherstation.ui.views.MeasurePager
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MainScreen(
     state: MainScreenState,
@@ -80,7 +80,6 @@ internal fun MainScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TopBar(
     scrollBehavior: TopAppBarScrollBehavior,
@@ -182,7 +181,7 @@ private fun LocationDropDown(
 
 @Preview
 @Composable
-fun MeasureViewPreview() {
+fun MainScreenPreview() {
     MaterialTheme {
         MainScreen(state = screenStab)
     }
